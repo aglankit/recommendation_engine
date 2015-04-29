@@ -15,7 +15,7 @@ def fillCastList(cast):
   global cast_list
   count = 0
   for item in cast:
-    cast_list.append(item)
+    cast_list.append(item['name'].encode('ascii', 'ignore'))
     count += 1
   while count < 3:
     cast_list.append("")
@@ -25,7 +25,7 @@ def fillWritersList(writers):
   global writers_list
   count = 0
   for item in writers:
-    writers_list.append(item)
+    writers_list.append(item['name'].encode('ascii', 'ignore'))
     count += 1
   while count < 2:
     writers_list.append("")
@@ -35,7 +35,7 @@ def fillGenresList(genres):
   global genre_list
   count = 0
   for item in genres:
-    genre_list.append(item)
+    genre_list.append(item.encode('ascii', 'ignore'))
     count += 1
   while count < 3:
     genre_list.append("")
@@ -96,7 +96,6 @@ def handleMovie(movie):
 
   try:
     director = the_unt['director'][0]
-    print director['name']
   except:
     director = ""
     print >> log, "Movie: %s; Key: director" % movie
@@ -177,15 +176,12 @@ def handleMovie(movie):
   fillWritersList(writers)
   fillGenresList(genres)
 
-
   try:
-    print "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|" % (movie.encode('ascii', 'ignore'), title.encode('ascii', 'ignore'), lititle.encode('ascii', 'ignore'), ctitle.encode('ascii', 'ignore'), lictitle.encode('ascii', 'ignore'), year, kind.encode('ascii', 'ignore'), director, runtime.encode('ascii', 'ignore'), rating, votes, mpaa.encode('ascii', 'ignore'), color.encode('ascii', 'ignore'), countries.encode('ascii', 'ignore'), akas.encode('ascii', 'ignore'), languages.encode('ascii', 'ignore'), certificates.encode('ascii', 'ignore'), "Attribute"), 
+    print "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|" % (movie.encode('ascii', 'ignore'), title.encode('ascii', 'ignore'), lititle.encode('ascii', 'ignore'), ctitle.encode('ascii', 'ignore'), lictitle.encode('ascii', 'ignore'), year, kind.encode('ascii', 'ignore'), director['name'].encode('ascii', 'ignore'), runtime.encode('ascii', 'ignore'), rating, votes, mpaa.encode('ascii', 'ignore'), color.encode('ascii', 'ignore'), countries.encode('ascii', 'ignore'), akas.encode('ascii', 'ignore'), languages.encode('ascii', 'ignore'), certificates.encode('ascii', 'ignore')), 
     print "%s|%s|%s|%s|%s|%s|%s|%s" % (cast_list.pop(0), cast_list.pop(0), cast_list.pop(0), writers_list.pop(0), writers_list.pop(0), genre_list.pop(0), genre_list.pop(0), genre_list.pop(0))
     #print "%s|%s|%s|%s|%s|%s|%s|%s" % (cast_list.pop(0)['name'].encode('ascii', 'ignore'), cast_list.pop(0)['name'].encode('ascii', 'ignore'), cast_list.pop(0)['name'].encode('ascii', 'ignore'), writers_list.pop(0)['name'].encode('ascii', 'ignore'), writers_list.pop(0)['name'].encode('ascii', 'ignore'), genre_list.pop(0)['name'].encode('ascii', 'ignore'), genre_list.pop(0)['name'].encode('ascii', 'ignore'), genre_list.pop(0)['name'].encode('ascii', 'ignore'))
   except:
-    #print logging.exception('')
     print >> log, "Failed to print info for movie %s" % movie
-    print 
 
 # Create the object that will be used to access the IMDb's database.
 ia = imdb.IMDb() # by default access the web.
@@ -194,7 +190,7 @@ log = open ("log", "w+")
 with open(sys.argv[1]) as inputFile:
   for line in inputFile:
     movie = line.strip()
-    #time.sleep(random.randint(1, 5))
+    time.sleep(random.randint(1, 3))
     handleMovie(movie)
 
 log.close()

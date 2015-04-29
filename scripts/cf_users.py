@@ -29,6 +29,7 @@ def calculateSimilarityItems(item1, item2):
   return result
 
 def fillSimilarityMatrix():
+
   for row in range(0, 943):
     for column in range(row + 1, 943):
       sim = calculateSimilarityUsers(row, column);
@@ -36,12 +37,14 @@ def fillSimilarityMatrix():
       Similarity[column][row] = sim
 
 def fillAverageMatrix():
+
   for user in range(0, 943):
     Average[user] = np.average(getReview(user))
     #print getReview(user)
     #print Average[user]
 
 def predictRating(user, item):
+
   users = []
   weight = []
   for rater in range(0, 943):
@@ -56,6 +59,9 @@ ftr = open(train, "rb")
 
 test = sys.argv[2]
 fte = open(test, "rb")
+
+max_items = 1682
+max_users = 943
 
 Utility = [[0 for x in range(1682)] for x in range(943)] 
 Similarity = np.array([[0 for x in range(943)] for x in range(943)], dtype=float)

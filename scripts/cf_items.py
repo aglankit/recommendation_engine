@@ -1,5 +1,6 @@
 import csv
 import sys
+import warnings
 import numpy as np
 from sets import Set
 from scipy import spatial
@@ -17,7 +18,11 @@ def getReview(item):
 
 
 def calculateSimilarityItems(item1, item2):
-  result = 1 - spatial.distance.cosine(Utility[item1], Utility[item2])
+  try:
+    result = 1 - spatial.distance.cosine(Utility[item1], Utility[item2])
+  except Warning:
+    #print "Exception at %d : %d" % (item1, item2)
+    result = 0.5
   return result
 
 def fillSimilarityMatrix():
@@ -31,7 +36,10 @@ def fillSimilarityMatrix():
 def fillAverageMatrix():
   global max_items
   for item in range(0, max_items):
-    Average[item] = np.average(getReview(item))
+    try:
+      Average[item] = np.average(getReview(item))
+    except Warning:
+      Average[item] = 3.0
     #print getReview(user)
     #print Average[user]
 
@@ -53,6 +61,8 @@ ftr = open(train, "rb")
 test = sys.argv[2]
 fte = open(test, "rb")
 
+warnings.filterwarnings('error')
+
 max_items = 1682
 max_users = 943
 
@@ -62,7 +72,7 @@ Average = np.array([0 for x in range(max_items)], dtype=float)
 
 reader = csv.DictReader(ftr, delimiter='\t')
 for row in reader:
-  Utility[int(row['uid'])-1][int(row['mid'])-1] = int(row['ratings'])
+  Utility[int(row['mid'])-1][int(row['uid'])-1] = int(row['ratings'])
 ftr.close()
 
 fillSimilarityMatrix()
@@ -79,7 +89,10 @@ for row in reader:
     rating = predictRating(int(row['uid'])-1, int(row['mid'])-1)
     y_pred.append(rating)
   except:
-    rating = Average[int(row['uid'])-1]
+    rating = Average[int(row['mid'])-1]
+    if rating == 0.0:
+      print "Rating = 0 for %d" % int(row['mid'])
+      rating = 3.0
     y_pred.append(rating)
 
 print y_pred
