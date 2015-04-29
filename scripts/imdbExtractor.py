@@ -96,6 +96,7 @@ def handleMovie(movie):
 
   try:
     director = the_unt['director'][0]
+    print director['name']
   except:
     director = ""
     print >> log, "Movie: %s; Key: director" % movie
