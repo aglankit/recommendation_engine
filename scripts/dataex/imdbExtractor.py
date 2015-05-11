@@ -13,6 +13,7 @@ genre_list = []
 
 def fillCastList(cast):
   global cast_list
+  cast_list=[]
   count = 0
   for item in cast:
     cast_list.append(item['name'].encode('ascii', 'ignore'))
@@ -23,6 +24,7 @@ def fillCastList(cast):
   
 def fillWritersList(writers):
   global writers_list
+  writers_list=[]
   count = 0
   for item in writers:
     writers_list.append(item['name'].encode('ascii', 'ignore'))
@@ -33,6 +35,7 @@ def fillWritersList(writers):
   
 def fillGenresList(genres):
   global genre_list
+  genre_list=[]
   count = 0
   for item in genres:
     genre_list.append(item.encode('ascii', 'ignore'))
@@ -44,10 +47,6 @@ def fillGenresList(genres):
 def handleMovie(movie):
   # Search for a movie (get a list of Movie objects).
   s_result = ia.search_movie(movie)
-
-  # Print the long imdb canonical title and movieID of the results.
-  #for item in s_result:
-  #   print item['long imdb canonical title'], item.movieID
 
   # Retrieves default information for the first result (a Movie object).
   try:
@@ -179,7 +178,6 @@ def handleMovie(movie):
   try:
     print "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|" % (movie.encode('ascii', 'ignore'), title.encode('ascii', 'ignore'), lititle.encode('ascii', 'ignore'), ctitle.encode('ascii', 'ignore'), lictitle.encode('ascii', 'ignore'), year, kind.encode('ascii', 'ignore'), director['name'].encode('ascii', 'ignore'), runtime.encode('ascii', 'ignore'), rating, votes, mpaa.encode('ascii', 'ignore'), color.encode('ascii', 'ignore'), countries.encode('ascii', 'ignore'), akas.encode('ascii', 'ignore'), languages.encode('ascii', 'ignore'), certificates.encode('ascii', 'ignore')), 
     print "%s|%s|%s|%s|%s|%s|%s|%s" % (cast_list.pop(0), cast_list.pop(0), cast_list.pop(0), writers_list.pop(0), writers_list.pop(0), genre_list.pop(0), genre_list.pop(0), genre_list.pop(0))
-    #print "%s|%s|%s|%s|%s|%s|%s|%s" % (cast_list.pop(0)['name'].encode('ascii', 'ignore'), cast_list.pop(0)['name'].encode('ascii', 'ignore'), cast_list.pop(0)['name'].encode('ascii', 'ignore'), writers_list.pop(0)['name'].encode('ascii', 'ignore'), writers_list.pop(0)['name'].encode('ascii', 'ignore'), genre_list.pop(0)['name'].encode('ascii', 'ignore'), genre_list.pop(0)['name'].encode('ascii', 'ignore'), genre_list.pop(0)['name'].encode('ascii', 'ignore'))
   except:
     print >> log, "Failed to print info for movie %s" % movie
 
@@ -190,7 +188,6 @@ log = open ("log", "w+")
 with open(sys.argv[1]) as inputFile:
   for line in inputFile:
     movie = line.strip()
-    time.sleep(random.randint(1, 3))
     handleMovie(movie)
 
 log.close()
